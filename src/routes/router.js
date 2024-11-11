@@ -1,9 +1,10 @@
 const express = require("express");
+const registerMiddleware = require("../middlewares/register.middleware.js");
+const registerController = require("../controllers/register.controller.js"); 
 
 const router = express.Router();
 
-router.get("/", (req,res) => {
-  res.send("Hello World");
-})
+// User Routes
+router.post("/api/register", registerMiddleware, registerController);
 
 module.exports = router;
