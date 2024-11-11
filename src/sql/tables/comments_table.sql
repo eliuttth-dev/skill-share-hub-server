@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS Comments(
+  comment_id INT AUTO_INCREMENT PRIMARY KEY,
+  video_id INT NOT NULL,
+  user_id INT NOT NULL,
+  comment_text TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (video_id) REFERENCES Videos(video_id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
