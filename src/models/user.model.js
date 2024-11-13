@@ -45,10 +45,17 @@ async function createUser(username, email, hashedPassword, bio = 'no bio yet', p
   const connection = await getConnection();
 
   try{
+
+    await connection.beginTransaction();
+
     const query = "INSERT INTO Users(username, email, password_hash, bio, profile_pic_url) VALUES (?, ?, ?, ?, ?)";
     const values = [username, email, hashedPassword, bio, profile_pic_url];
     
     await executableQuery(connection, query, values);
+  }catch(error){
+    console.error("Error in transaction", error.message);
+    await connection.rollback();
+    throw error;
   }finally{
     releaseConnection(connection);
   }

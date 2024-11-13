@@ -1,15 +1,17 @@
 const { checkUserExists, createUser } = require("../models/user.model.js");
 
+const { REQUIRED_FIELDS } = require("../config/constants.js");
+
 function validateRequestBody(reqBody, requiredFields){
+  
+  console.log(requiredFields)
   return requiredFields.every(field => reqBody.hasOwnProperty(field) && reqBody[field]);
 }
 
 async function registerUser(req, res){
   const { username, email, hashedPassword, bio = "no bio yet", profile_pic_url = ""} = req.body;
   
-  // Validate the request body
-  const requiredFields = ["username", "email", "hashedPassword"];
-  if(!validateRequestBody(req.body, requiredFields)) return res.status(400).json({message: "Missing required fields"});
+  if(!validateRequestBody(req.body, REQUIRED_FIELDS)) return res.status(400).json({message: "Missing required fields"});
 
   try{
     const userExists = await checkUserExists(username, email);
