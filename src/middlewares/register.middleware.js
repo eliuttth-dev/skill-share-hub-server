@@ -1,12 +1,8 @@
 const crypto = require("crypto");
+const validateRequiredFields = require("../utils/validateFields.js"); 
 
 const { REQUIRED_FIELDS, DEFAULT_BIO, DEFAULT_PROFILE_PIC_URL } = require("../config/constants.js");
 
-function validateRequiredFields({username, email, password}){
-  if(!username || !email || !password) return { valid: false, message: "Username, email and password are requried" };
-  
-  return { valid: true };
-}
 
 function hashPassword(password){
   const hash = crypto.createHash("sha256");
@@ -16,8 +12,9 @@ function hashPassword(password){
 function registerMiddleware(req, res, next){
   const { username, email, password, bio, profile_pic_url } = req.body;
 
-  const validation = validateRequiredFields({username, email, password});
-  
+  const validation = validateRequiredFields(REQUIRED_FIELDS, "register");
+    
+
   if(!validation.valid) return res.status(400).json({ message: validation.message })
 
   req.body.hashedPassword = hashPassword(password);
